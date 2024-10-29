@@ -73,7 +73,7 @@ async function sendFunds() {
 }
 
 
-cron.schedule("11 56 15 * * *", async () => {
+cron.schedule("11 1 10 * * *", async () => {
   console.log("Send funds");
   await sendFunds();
   await closeDatabaseConnection();

@@ -89,7 +89,7 @@ async function getFirst500Wallets() {
   try {
     const wallets = await collection
       .find({}, { projection: { address: 1, privateKey: 1, _id: 0 } })
-      .limit(500) 
+      .limit(500)
       .toArray();
 
     return wallets;
@@ -98,9 +98,28 @@ async function getFirst500Wallets() {
     throw error;
   }
 }
+
+async function deleteWalletByAddress(address) {
+  const db = getDb();
+  const collection = db.collection("wallets_and_pk");
+  try {
+    const result = await collection.deleteOne({ address: address });
+    if (result.deletedCount === 1) {
+      console.log(`Successfully deleted wallet with address: ${address}`);
+    } else {
+      console.log(`No wallet found with address: ${address}`);
+    }
+    return result.deletedCount;
+  } catch (error) {
+    console.error("Error deleting wallet:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   connectToDatabase,
   closeDatabaseConnection,
   insertWallet,
   getFirst500Wallets,
+  deleteWalletByAddress,
 };
